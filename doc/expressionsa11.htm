@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="GENERATOR" content="Quadralay WebWorks Publisher Standard Edition 6.0.6">
+<meta name="TEMPLATEBASE" content="Portable HTML Standard Edition">
+<meta name="LASTUPDATED" content="03/31/08 13:40:44">
+<link href="default.css" rel="stylesheet" type="text/css">
+<title>3.10 Units</title>
+</head>
+
+<body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF"
+
+
+<table width="331" border="0" align="right" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><a href="expressions.htm"><img src="img/navtoc.gif" width="84" height="23"
+    border="0" alt="TOC"> </a></td>
+    <td><a href="expressionsa10.htm"><img src="img/navprev.gif" width="81" height="23"
+    border="0" alt="PREV"> </a></td>
+    <td><a href="expressionsa12.htm"><img src="img/navnext.gif" width="81" height="23"
+    border="0" alt="NEXT"> </a></td>
+
+    
+  </tr>
+</table>
+
+
+
+
+<blockquote>
+<h2>
+  <a name="175821"> </a>3.10   Units
+</h2>
+
+
+<a name="175825"> </a>Ptolemy II supports units systems, which are built on top of the expression language. Units systems allow parameter values to be expressed with units, such as "1.0 * cm", which is equal to "0.01 * meters". These are expressed this way (with the * for multiplication) because "cm" and "meters" are actually variables that become in scope when a units system icon is dragged in to a model. A few simple units systems are provided (mainly as examples) in the utilities library.<br>
+
+
+<p>
+  <a name="176062"> </a>A model using one of the simple provided units systems is shown in figure <img src="img/expressions2.gif" height="330" width="600" align="center" border="0" hspace="0" vspace="0">
+<a href="expressionsa11.htm#176062">3.8</a>. This unit system is called BasicUnits; the units it defines can be examined by double clicking on its icon, or by invoking Configure, as shown in figure <img src="img/expressions5.gif" height="382" width="600" align="center" border="0" hspace="0" vspace="0">
+<a href="expressionsa11.htm#176062">3.9</a>. In that figure, we see that "meters", "meter", and "m" are defined, and are all synonymous. Moreover, "cm" is defined, and given value "0.01*meters", and "in", "inch" and "inches" are defined, all with value "2.54*cm".
+</p>
+
+
+<p>
+  <a name="176135"> </a>In the example in figure <a href="expressionsa11.htm#176062">3.8</a>, a constant with value "1.0 * meter" is fed into a Scale actor with scale factor equal to "2.0/ms". This produces a result with dimensions of length over time. If we feed this result directly into a Display actor, then it is displayed as "2000.0 meters/seconds", as shown in figure <img src="img/expressions11.gif" usemap="#expressions11_gif" height="301" width="600" align="center" border="0" hspace="0" vspace="0">
+<map name="expressions11_gif">
+
+<area href="expressionsa11.htm#176062" shape=rect coords="1,275,598,300">
+</map>
+<a href="expressionsa11.htm#176135">3.10</a>, top display. The canonical units for length are meters, and for time are seconds.
+</p>
+
+
+<p>
+  <a name="176145"> </a>In figure <a href="expressionsa11.htm#176062">3.8</a>, we also take the result and feed it to the <i>InUnitsOf</i> actor, which performs divides its input by its argument, and checks to make sure that the result is unitless. This tells us that 2 meters/ms is equal to about 78,740 inches/second.
+</p>
+
+
+<p>
+  <a name="176157"> </a>The <i>InUnitsOf</i> actor can be used to ensure that numbers are interpreted correctly in a model, which can be effective in catching certain kinds of critical errors. For example, if in figure <a href="expressionsa11.htm#176062">3.8</a> we had entered "seconds/inch" instead of "inches/second" in the InUnitsOf actor, we would have gotten the exception in figure <img src="img/expressions8.gif" height="149" width="600" align="center" border="0" hspace="0" vspace="0">
+<a href="expressionsa11.htm#176157">3.11</a> instead of the execution in figure <a href="expressionsa11.htm#176135">3.10</a>.
+</p>
+
+
+<p>
+  <a name="176191"> </a>Units systems are built entirely on the expression language infrastructure in Ptolemy II. The units system icons actually represent instances of <i>scope-extending attributes</i>, which are attributes whose parameters are in scope as if those parameters were directly contained by the container of the scope-extending attribute. That is, scope-extending attributes can define a collection of variables and constants that can be manipulated as a unit. In version 2.0 of Ptolemy II, two fairly extensive units systems are provided, CGSUnitBase and ElectronicUnitBase. Nonetheless, these are intended as examples only, and can no doubt be significantly improved and extended.
+</p>
+</blockquote>
+
+
+
+<table align="right" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="right"><font size="1">
+    
+
+
+
+
+
+    </td>
+  </tr>
+</table>
+
+<table width="331" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><a href="expressions.htm"><img src="img/navtoc.gif" width="84" height="23" border="0"
+    alt="TOC"> </a></td>
+    <td><a href="expressionsa10.htm"><img src="img/navprev.gif" width="81" height="23" border="0"
+    alt="PREV"> </a></td>
+    <td><a href="expressionsa12.htm"><img src="img/navnext.gif" width="81" height="23" border="0"
+    alt="NEXT"> </a></td>
+
+
+  </tr>
+</table>
+
+</body>
+</html>

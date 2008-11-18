@@ -1,0 +1,950 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="GENERATOR" content="Quadralay WebWorks Publisher Standard Edition 6.0.6">
+<meta name="TEMPLATEBASE" content="Portable HTML Standard Edition">
+<meta name="LASTUPDATED" content="03/31/08 14:31:29">
+<link href="../default.css" rel="stylesheet" type="text/css">
+<title>Programming Style for Ptolemy II</title>
+</head>
+
+<body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF"
+
+
+
+
+
+<blockquote>
+<h1>Programming Style for Ptolemy II</h1>
+This document is also <a href="style.pdf" target="_top">Available in PDF format</a>
+<p><a name="180543"> </a>Authors:		Christopher Brooks<br>
+
+
+<a name="180544"> </a>		Edward A. Lee<br>
+
+
+<h3>
+  <a name="180545"> </a>6.1   Motivation
+</h3>
+
+
+<a name="175734"> </a>Collaborative software projects benefit when participants read code created by other participants. The objective of a coding style is to reduce the fatigue induced by <i>unimportant</i> formatting differences and differences in naming conventions. Although individual programmers will undoubtedly have preferences and habits that differ from the recommendations here, the benefits that flow from following these recommendations far outweigh the inconveniences. Published papers in journals are subject to similar stylistic and layout constraints, so such constraints are not new to the academic community.<br>
+
+
+<a name="167359"> </a>Software written by the Ptolemy Project participants follows this style guide. Although many of these conventions are arbitrary, the resulting consistency makes reading the code much easier, once you get used to the conventions. We recommend that if you extend Ptolemy II in any way, that you follow these conventions. To be included in future versions of Ptolemy II, the code <i>must</i> follow the conventions.<br>
+
+
+<p>
+  <a name="180659"> </a>In general, we follow the Sun Java Style guide (http://java.sun.com/docs/codeconv/). We encourage new developers to use Eclipse (http://www.eclipse.org) as their development platform. Eclipse includes a Java Formatter, and we have found that the Java Conventions style is very close to our requirements. For information about setting up Eclipse to follow the Ptolemy II coding style, see $PTII/doc/coding/eclipse.htm.
+</p>
+
+
+<p>
+  <a name="170752"> </a>A template that follows these rules can be found in $PTII/doc/coding/templates/JavaTemplate.java, where $PTII is the location of your Ptolemy II installation. In addition, several useful tools are provided in the directories under $PTII/util/ to help enforce the standards. 
+</p>
+
+<ul>
+  <li><a name="177265"> </a>lisp/ptjavastyle.el is a lisp module for GNU Emacs that has appropriate indenting rules. This file works well with Emacs under both Unix and Windows.
+  <li><a name="177266"> </a>testsuite/jindent</font> is a shell script that uses Emacs and the above module to properly indent many files at once. This script works best under Unix, but can work under Windows with Cygwin. To see how this script would all the Java files in a directory, run:<br>$PTII/util/testsuite/jindent -q *.java<br>To indent the files and check the changes in to CVS, remove the -q option.
+  <li><a name="177319"> </a>testsuite/ptspell</font> is a shell script that checks Java code and prints out an alphabetical list of unrecognized spellings. It properly handles namesWithEmbeddedCapitalization and has a list of author names. This script works best under Unix. Under Windows, it would require the installation of the ispell</font> command as /usr/local/bin/ispell</font>. To run this script, type<br>$PTII/util/testsuite/ptspell *.java
+  <li><a name="177274"> </a>testsuite/chkjava</font> is a shell script for checking various other potentially bad things in Java code, such as debugging code, and FIXME's. This script works under both Unix and Windows. To run this script, type:<br>$PTII/util/testsuite/chkjava *.java
+</ul>
+
+<h3>
+  <a name="176671"> </a>6.2   Anatomy of a File
+</h3>
+
+
+<a name="176733"> </a>A Java file has the structure shown in figure 6.1:
+<pre>
+/* One line description of the class.
+
+copyright notice
+
+*/
+
+package name;
+
+imports, in alphabetical order;
+
+//////////////////////////////////////////////////////////////////////////
+//// ClassName
+/**
+Class documentation.
+
+@author Author Name
+@version $Id$
+@Pt.ProposedRating color (email of proposer)
+@Pt.AcceptedRating color (email of accepter)
+*/
+public class ClassName ... {
+
+    constructors
+
+    ///////////////////////////////////////////////////////////////////
+    ////                         public variables                  ////
+    
+    public variables, in alphabetical order
+
+    ///////////////////////////////////////////////////////////////////
+    ////                         public methods                    ////
+
+    public methods, in alphabetical order
+
+    ///////////////////////////////////////////////////////////////////
+    ////                         protected methods                 ////
+
+    protected methods, in alphabetical order
+
+    ///////////////////////////////////////////////////////////////////
+    ////                         protected variables               ////
+
+    protected variables, in alphabetical order
+
+    ///////////////////////////////////////////////////////////////////
+    ////                         private methods                   ////
+
+    private methods, in alphabetical order
+
+    ///////////////////////////////////////////////////////////////////
+    ////                         private variables                 ////
+
+    private variables, in alphabetical order
+}
+</pre>
+The key points to note about this organization are:<br>
+
+<ul>
+  <li><a name="176659"> </a>The file is divided into sections with highly visible delimiters. The sections contain constructors, public variables (including ports and parameters for actor definitions), public methods, protected variables, protected members, private methods, and private variables, in that order. Note in particular that although it is customary in the Java community to list private variables at the beginning of a class definition, we put them at the end. They are not part of the public interface, and thus should not be the first thing you see.
+  <li><a name="176636"> </a>Within each section, methods appear in alphabetical order, in order to easily search for a particular method (in printouts, for example, finding a method can be very difficult if the order is arbitrary, and use of printouts during design and code reviews is very convenient). If you wish to group methods together, try to name them so that they have a common prefix. Static methods are generally mixed with non-static methods.
+</ul>
+
+<a name="176888"> </a>The key sections are explained below.<br>
+
+
+<h4>
+  <a name="176030"> </a>6.2.1   Copyright
+</h4>
+
+
+<a name="176041"> </a>The copyright used in Ptolemy II is shown in figure
+6.2.
+<pre>
+Copyright (c) 1999-2008 The Regents of the University of California.
+ All rights reserved.
+ Permission is hereby granted, without written agreement and without
+ license or royalty fees, to use, copy, modify, and distribute this
+ software and its documentation for any purpose, provided that the above
+ copyright notice and the following two paragraphs appear in all copies
+ of this software.
+
+ IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY
+ FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+ ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+
+ THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
+ PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
+ CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
+ ENHANCEMENTS, OR MODIFICATIONS.
+
+                                        PT_COPYRIGHT_VERSION_2
+                                        COPYRIGHTENDKEY
+</pre>
+This style of copyright is often referred to the community as a "BSD" copyright because it was used for the "Berkeley standard distribution" of Unix. It is much more liberal that the commonly used "GPL" or "Gnu Public License," which encumbers the software and derivative works with the requirement that they carry the source code and the same copyright agreement. The BSD copyright requires that the software and derivative work carry the identity of the copyright owner, as embodied in the lines:<br>
+
+<pre>
+<a name="176858"> </a>
+Copyright (c) 1999-2008 The Regents of the University of California.<a name="176864"> </a>
+All rights reserved.<a name="176865"> </a>
+<a name="176862"> </a>
+</pre>
+
+<a name="176875"> </a>The copyright also requires that copies and derivative works include the disclaimer of liability in BOLD. It specifically <i>does not</i> require that copies of the software or derivative works carry the middle paragraph, so such copies and derivative works need not grant similarly liberal rights to users of the software.<br>
+
+
+<p>
+  <a name="176883"> </a>The intent of the BSD copyright is to maximize the potential impact of the software by enabling uses of the software that are inconsistent with disclosing the source code or granting free redistribution rights. For example, a commercial enterprise can extend the software, adding value, and sell the original software embodied with the extensions. Economic principles indicate that granting free redistribution rights may render the enterprise business model untenable, so many business enterprises avoid software with GPL licenses. Economic principles also indicate that, in theory, fair pricing of derivative works must be based on the value of the extensions, the packaging, or the associated services provided by the enterprise. The pricing cannot reflect the value of the free software, since an informed consumer will, in theory, obtain that free software from another source.
+</p>
+
+
+<p>
+  <a name="176887"> </a>Software with a BSD license can also be more easily included in defense or national-security related applications, where free redistribution of source code and licenses may be inconsistent with the mission of the software.
+</p>
+
+
+<p>
+  <a name="177327"> </a>Ptolemy II can include other software with copyrights that are different from the BSD copyright. In general, we do not include software with the GNU General Public License (GPL) license, because provisions of the GPL license require that software with which GLP'd code is integrated also be encumbered by the GPL license. We make an exception for GPL'd code that is aggregated with Ptolemy II but not directly combined with Ptolemy II. For example cvs2cl.pl is a GPL'd Perl script that access the CVS database and generates a ChangeLog file. This script is not directly called by Ptolemy II, and we include it as a "mere aggregation" and thus Ptolemy II does not fall under the GPL. Note that we do not include GPL'd Java files that are compiled and then called from Ptolemy II because this would combine Ptolemy II with the GPL'd code and thus encumber Ptolemy II with the GPL.
+</p>
+
+
+<p>
+  <a name="180673"> </a>Another GNU license is the GNU Library General Public License now known as the GNU Lesser General Public License (LGPL). We try to avoid packages that have this license, but we on occasion we have included them with Ptolemy II. The LGPL license is less strict than the GPL - the LGPL permits linking with other packages without encumbering the other package.
+</p>
+
+
+<p>
+  <a name="180678"> </a>In general, it is best if you avoid GNU code. If you are considering using code with the GPL or LGPL, we encourage you to carefully read the license and to also consult the GNU GPL FAQ at http://www.gnu.org/licenses/gpl-faq.htm.
+</p>
+
+
+<p>
+  <a name="180672"> </a>We also avoid including software with proprietary copyrights that do not permit redistribution of the software.
+</p>
+
+
+<p>
+  <a name="177500"> </a>The date of the copyright for newly created files should be the current year:
+</p>
+
+<pre>
+Copyright (c) 2008 The Regents of the University of California.<a name="177503"> </a>
+All rights reserved.<a name="177504"> </a>
+</pre>
+
+<p>
+  <a name="177501"> </a>
+</p>
+
+
+<p>
+  <a name="177342"> </a>If a file is a copy of a previously copyrighted file, then the start date of the new file should be the same as that of the original file:
+</p>
+
+<pre>
+Copyright (c) 1999-2008 The Regents of the University of California.<a name="177525"> </a>
+All rights reserved.<a name="177526"> </a>
+</pre>
+
+<p>
+  <a name="177520"> </a>
+</p>
+
+
+<p>
+  <a name="177519"> </a>Ideally, files should have at most one copyright from one institution. Files with multiple copyrights are often in legal limbo if the copyrights conflict. If necessary, two institutions can share the same copyright:
+</p>
+
+<pre>
+Copyright (c) 2008 The Ptolemy Institute and The Regents of the<a name="177541"> </a>
+University of California.<a name="177547"> </a>
+All rights reserved.<a name="177542"> </a>
+<a name="177551"> </a>
+</pre>
+
+<p>
+  <a name="177534"> </a>Ptolemy II includes a copyright management system that will display the copyrights of packages that are included in Ptolemy II at runtime. Currently, URLs such as about:</font> and about:copyright</font> are handled specially. If, within Ptolemy, the user clicks on a link with a target URL of about:copyright, then we eventually invoke code within $PTII/ptolemy/actor/gui/GenerateCopyrights.java. This class searches the runtime environment for particular packages and generates a web page with the links to the appropriate copyrights if certain packages are found.
+</p>
+
+
+<h4>
+  <a name="176031"> </a>6.2.2   Imports
+</h4>
+
+
+<a name="176913"> </a>The imports section identifies the classes outside the current package on which this class depends. The package structure of Ptolemy II is carefully constructed so that core packages do not depend on more elaborate packages. This limited dependencies makes it possible to create derivative works that leverage the core but drastically modify or replace the more advanced capabilities.<br>
+
+
+<p>
+  <a name="176914"> </a>
+</p>
+
+
+<p>
+  <a name="180503"> </a>By convention, we list imports by full class name, as follows:
+</p>
+
+<pre>
+<a name="176915"> </a>
+import ptolemy.kernel.CompositeEntity;<a name="176921"> </a>
+import ptolemy.kernel.Entity;<a name="176922"> </a>
+import ptolemy.kernel.Port;<a name="176923"> </a>
+import ptolemy.kernel.util.IllegalActionException;<a name="176924"> </a>
+import ptolemy.kernel.util.Locatable;<a name="176925"> </a>
+import ptolemy.kernel.util.NameDuplicationException;<a name="176926"> </a>
+<a name="176919"> </a>
+</pre>
+
+<a name="176934"> </a>in particular, we do not use the wildcards supported by Java, as in:<br>
+
+<pre>
+<a name="176938"> </a>
+import ptolemy.kernel.*;<a name="176944"> </a>
+import ptolemy.kernel.util.*;<a name="176947"> </a>
+<a name="176942"> </a>
+</pre>
+
+<a name="176960"> </a>The reason that we discourage wildcards is that the full class names in import statements makes it easier find classes that are referenced in the code. If you use an IDE such as Eclipse, it is trivially easy to generate the import list in this form, so there is no reason to not do it.<br>
+
+
+<p>
+  <a name="176539"> </a>Imports are ordered alphabetically by package first, then by class name, as shown above.
+</p>
+
+
+<h3>
+  <a name="176037"> </a>6.3   Comment Structure
+</h3>
+
+
+<p>
+  <a name="176501"> </a>Good comments are essential to readable code. In Ptolemy II, comments fall into two categories, <i>Javadoc</i> comments, which become part of the generated documentation, and <i>code comments</i>, which do not. Javadoc comments are used to explain the interface to a class, and code comments are used to explain how it works.
+</p>
+
+
+<p>
+  <a name="176983"> </a>Both Javadoc and code comments should be complete sentences and complete thoughts, capitalized at the beginning and with a period at the end. Spelling and grammar should be correct. 
+</p>
+
+
+<h4>
+  <a name="176419"> </a>6.3.1   Javadoc and HTML
+</h4>
+
+
+<a name="176422"> </a>Javadoc is a program distributed with Java that generates HTML documentation files from Java source code files<a href="#180511"><sup>1</sup></a>. Javadoc comments begin with "/**</font>" and end with "*/". The comment immediately preceding a method, member, or class documents that method, member, or class. Ptolemy II classes include Javadoc documentation for all classes and all public and protected members and methods. Members and methods should appear in alphabetical order within their protection category (public, protected etc.) so that it is easy to find them in the Javadoc output.<br>
+
+
+<p>
+  <a name="177009"> </a>When writing Javadoc comments, pay special attention to the first sentence of each Javadoc comment. This first sentence is used as a summary in the Javadocs. It is extremely helpful if the first sentence is a cogent and complete summary.
+</p>
+
+
+<p>
+  <a name="177011"> </a>Javadoc comments can include embedded HTML formatting. For example, by convention, in actor documentation, we set in italics the names of the ports and parameters using the syntax
+</p>
+
+<pre>
+<a name="176423"> </a>
+/** In this actor, inputs are read from the &lt;i&gt;input&lt;/i&gt; port ... */<a name="176424"> </a>
+<a name="177029"> </a>
+</pre>
+
+<p>
+  <a name="177018"> </a>The Javadoc program gives extensive diagnostics when run on a source file. Our policy is to format the comments until there are no Javadoc warnings. Private members and methods need not be documented by Javadoc comments. The doccheck tool from http://java.sun.com/j2se/javadoc/doccheck/index.htm gives even more extensive diagnostics in HTML format. We encourage developers to run doccheck and fix all warnings.
+</p>
+
+
+<h4>
+  <a name="176975"> </a>6.3.2   Class documentation
+</h4>
+
+
+<a name="176976"> </a>The class documentation is the Javadoc comment that immediately precedes the class definition line. It is a particularly important part of the documentation. It should describe what the class does and how it is intended to be used. When writing it, put yourself in the mind of the user of your class. What does that person need to know? In particular, that person probably does not need to know <i>how</i> you accomplish what the class does. She only needs to know <i>what</i> you accomplish.<br>
+
+
+<p>
+  <a name="177033"> </a>A class may be intended to be a base class that is extended by other programmers. In this case, there may be two distinct sections to the documentation. The first section should describe how a user of the class should use the class. The second section should describe how a programmer can meaningfully extend the class. Only the second section should reference protected members or methods. The first section has no use for them. Of course, if the class is abstract, it cannot be used directly and the first section can be omitted.
+</p>
+
+
+<p>
+  <a name="176989"> </a>Comments should include honest information about the limitations of a class.
+</p>
+
+
+<p>
+  <a name="177437"> </a>Each class comment should also include the following javadoc tags:
+</p>
+
+<ul>
+  <li><a name="177438"> </a>@author<br>The @author tag should list the authors and contributors of a class, for example:<br>@author Claudius Ptolemaus, Contributor: Tycho Brahe
+  <li><a name="177449"> </a>@version<br>The @version tag includes text that CVS automatically substitutes in the version. The @version tag starts out with:<br>@version $Id$<br></font>When the file is committed using CVS, the $Id$ gets substituted, so the tag might look like:<br>@version $Id$<br></font>Note that for CVS keyword substitution to work properly, the file must have the -kkv attribute set. Usually, this is the default, but for some odd reason, Eclipse might check in files with -kv. The solution is to run<br>cvs admin -kkv filename<br>cvs update -A filename<br>
+  <li><a name="180830"> </a>@since<br>The @since tag refers the release that the class first appeared in. Usually, this is one decimal place after the current release. For example if the current release is 3.0.2, then the @since tag would read:<br>@since Ptolemy II 3.1<br>Adding an @since tag to a new class is optional, we usually update these tags by running a script when we do a release. However, authors should be aware of their meaning. Note that the @since tag can also be used when a method is added to an existing class, which will help users notice new features in older code.
+  <li><a name="180599"> </a>@Pt.ProposedRating
+  <li><a name="180642"> </a>@Pt.AcceptedRating<br>Code rating tags, discussed below.
+</ul>
+
+<h4>
+  <a name="180643"> </a>6.3.3   Code rating
+</h4>
+
+
+<a name="180605"> </a>The javadoc tags @Pt.ProposedRating</font> and @Pt.AcceptedRating</font> contain code rating information. Each tag includes the color (one of red</font>, yellow</font>, green</font>, or blue) and the cvs login of the person responsible for the proposed or accepted rating level, for example:<br>
+
+
+<p>
+  <a name="180626"> </a>@Pt.ProposedRating blue ptolemy
+</p>
+
+
+<p>
+  <a name="180627"> </a>@Pt.AcceptedRating green ptolemy
+</p>
+
+
+<p>
+  <a name="180606"> </a>The intent of the code rating is to clearly identify to readers of the file the level of maturity of the contents. The Ptolemy Project encourages experimentation, and experimentation often involves creating immature code, or even "throw-away" code. Such code is <i>red</i>. We use a lightweight software engineering process documented in "Software Practice in the Ptolemy Project,"<a href="#180609"><sup>2</sup></a> to raise the code to higher ratings. That paper documents the ratings a:
+</p>
+
+
+<p>
+  <a name="180610"> </a><b> </b>Red code is untrusted code. This means that we have no confidence in the design or implementation (if there is one) of this code or design, and that anyone that uses it can expect it to change substantially and without notice. All code starts at red.
+</p>
+
+
+<p>
+  <a name="180611"> </a> Yellow code is code with a trusted design. We have a reasonable degree of confidence in the design, and do not expect it to change in any substantial way. However, we do expect the API to shift around a little during development.
+</p>
+
+
+<p>
+  <a name="180612"> </a> Green code is code with a trusted implementation. We have confidence that the implementation is sound, based on test suites and practical application of the code. If possible, we try not to release important code unless it is green.
+</p>
+
+
+<p>
+  <a name="180613"> </a> Blue marks polished and complete code, and also represents a firm commitment to backwards-compatibility. Blue code is completely reviewed, tested, documented, and stressed in actual usage.
+</p>
+
+
+<p>
+  <a name="180616"> </a>We use a javadoc doclet at $PTII/doc/doclets/RatingTaglet.java to add the ratings to the javadoc output.
+</p>
+
+
+<h4>
+  <a name="177037"> </a>6.3.4   Constructor documentation
+</h4>
+
+
+<a name="177052"> </a>Constructor documentation usually begins with the phrase "Construct an instance that ..." and goes on to give the properties of that instance. Note the use of the imperative case. A constructor is a command to construct an instance of a class. What it does is construct an instance.<br>
+
+
+<h4>
+  <a name="177047"> </a>6.3.5   Method documentation
+</h4>
+
+
+<a name="177055"> </a>Method documentation needs to state what the method does and how it should be used. For example:<br>
+
+<pre>
+<a name="177063"> </a>
+/** Mark the object invalid, indicating that when a method<a name="177091"> </a>
+ *  is next called to get information from the object, that<a name="177079"> </a>
+ *  information needs to be reconstructed from the database.<a name="177081"> </a>
+ */<a name="177082"> </a>
+public void invalidate() {<a name="177083"> </a>
+    _valid = false;<a name="177116"> </a>
+}<a name="177115"> </a>
+<a name="177087"> </a>
+</pre>
+
+<a name="177066"> </a>By contrast, here is a poor method comment:<br>
+
+<pre>
+<a name="177092"> </a>
+/** Set the variable _valid to false.<a name="177098"> </a>
+ */<a name="177101"> </a>
+public void invalidate() {<a name="177120"> </a>
+    _valid = false;<a name="177121"> </a>
+}<a name="177122"> </a>
+<a name="177102"> </a>
+</pre>
+
+<a name="177109"> </a>While this certainly describes what the method does from the perspective of the coder, it says nothing useful from the perspective of the user of the class, who cannot see the (presumably private) variable _valid nor how that variable is used. On closer examination, this comment describes <i>how</i> the method is accomplishing what it does, but it does not describe <i>what</i> it accomplishes.<br>
+
+
+<p>
+  <a name="177151"> </a>Here is an even worse method comment:
+</p>
+
+<pre>
+<a name="177133"> </a>
+/** Invalidate this object.<a name="177134"> </a>
+ */<a name="177135"> </a>
+public void invalidate() {<a name="177136"> </a>
+    _valid = false;<a name="177137"> </a>
+}<a name="177138"> </a>
+<a name="177152"> </a>
+</pre>
+
+<a name="177153"> </a>This says absolutely nothing.<br>
+
+
+<p>
+  <a name="177169"> </a>Note the use of the imperative case in all of the above comments. It is common in the Java community to use the following style for documenting methods:
+</p>
+
+<pre>
+
+/** Sets the expression of this variable. 
+ *  @param expression The expression for this variable.
+ */
+public void setExpression(String expression) {
+	...
+}
+<a name="177170"> </a>
+</pre>
+
+<a name="177171"> </a>We use instead the imperative case, as in<br>
+
+<pre>
+
+/** Set the expression of this variable.
+ *  @param expression The expression for this variable.
+ */
+public void setExpression(String expression) {
+	...
+}
+<a name="177172"> </a>
+</pre>
+
+<a name="177173"> </a>The reason we do this is that our sentence is a well-formed, grammatical English sentence, while the usual convention is not (it is missing the subject). Moreover, calling a method is a command "do this," so it seems reasonable that the documentation say "Do this." The use of imperative case has a large impact on how interfaces are documented, especially when using the listener design pattern. For instance, the java.awt.event.ItemListener interface has the method:<br>
+
+<pre>
+<a name="177174"> </a>
+/** Invoked when an item has been selected or deselected.<a name="177175"> </a>
+ *  The code written for this method performs the operations<a name="177176"> </a>
+ *  that need to occur when an item is selected (or deselected).<a name="177177"> </a>
+ */<a name="177178"> </a>
+void itemStateChanged(ItemEvent e);<a name="177179"> </a>
+<a name="177180"> </a>
+</pre>
+
+<a name="177181"> </a>A naive attempt to rewrite this in imperative tense might result in:<br>
+
+<pre>
+<a name="177182"> </a>
+/** Notify this object that an item has been selected or deselected.<a name="177183"> </a>
+ */<a name="177184"> </a>
+void itemStateChanged(ItemEvent e);	<a name="177185"> </a>
+<a name="177186"> </a>
+</pre>
+
+<a name="177187"> </a>However, this sentence does not capture what the method does. The method may be called <i>in order to </i>notify the listener, but the <i>method</i> does not "notify this object". The correct way to concisely document this method in imperative case (and with meaningful names) is:<br>
+
+<pre>
+<a name="177188"> </a>
+/** React to the selection or deselection of an item.<a name="177189"> </a>
+ */<a name="177190"> </a>
+void itemStateChanged(ItemEvent event);	<a name="177191"> </a>
+<a name="177192"> </a>
+</pre>
+
+<a name="177193"> </a>The above is defining an interface (no implementation is given). To define the implementation, it is also necessary to describe what the method does:<br>
+
+<pre>
+<a name="177194"> </a>
+/** React to the selection or deselection of an item by doing...<a name="177195"> </a>
+ */<a name="177196"> </a>
+void itemStateChanged(ItemEvent event) { ... implementation ... }<a name="177197"> </a>
+<a name="177206"> </a>
+</pre>
+
+<p>
+  <a name="177223"> </a>Comments for base class methods that are intended to be overridden should include information about what the method generally does, plus information that a programmer may need to override it. If the derived class uses the base class method (by calling super.methodName()</font>), but then appends to its behavior, then the documentation in the derived class should describe <i>both</i> what the base class does and what the derived class does.
+</p>
+
+
+<h4>
+  <a name="177225"> </a>6.3.6   Referring to methods in comments
+</h4>
+
+
+<p>
+  <a name="177226"> </a>By convention, method names are set in the default font, but followed by empty parentheses, as in
+</p>
+
+<pre>
+<a name="176427"> </a>
+/** The fire() method is called when ... */<a name="176428"> </a>
+<a name="176429"> </a>
+</pre>
+
+<a name="176430"> </a>The parentheses are empty even if the method takes arguments. The arguments are not shown. If the method is overloaded (has several versions with different argument sets), then the text of the documentation needs to distinguish which version is being used.<br>
+
+
+<p>
+  <a name="177582"> </a>Other methods in the same class may be linked to with the {@link ...} Javadoc tag. For example, to link to a foo() method that takes a String:
+</p>
+
+<pre>
+<a name="177584"> </a>
+* Unlike the {@link #foo(String)} method, this method ...<a name="180490"> </a>
+<a name="180491"> </a>
+</pre>
+
+<a name="177590"> </a>Methods and members in the same package should have an octothorpe (# sign) prepended. Methods and members in other classes should use the fully qualified class name: <br>
+
+<pre>
+<a name="177597"> </a>
+{@link ptolemy.util.StringUtilities.substitute(String, String, String)}<a name="180495"> </a>
+<a name="180496"> </a>
+</pre>
+
+<a name="177601"> </a>Links to methods should include the types of the arguments.<br>
+
+
+<p>
+  <a name="177605"> </a>To run Javadoc on the classes in the current directory, run make docs, which will create the HTML javadoc output in the doc/codeDoc subdirectory. To run Javadoc for all the common packages, run
+</p>
+
+<pre>
+cd $PTII/doc; make docs<a name="177609"> </a>
+</pre>
+
+<p>
+  <a name="177616"> </a>The output will appear in $PTII/doc/codeDoc. Actor documentation can be viewed from within Vergil, right clicking on an actor and selecting View Documentation.
+</p>
+
+
+<h4>
+  <a name="176460"> </a>6.3.7   Tags in method documents
+</h4>
+
+
+<a name="176599"> </a>Methods should include Javadoc tags @param (one for each parameter), @return (unless the return type is void), and @exception (unless no exceptions are thrown). Note that we do not use the @throws tag, and that @returns is not a legitimate Javadoc tag, use @return instead.<br>
+
+
+<p>
+  <a name="176595"> </a>The annotation for the arguments (the @param statement) need not be a complete sentence, since it is usually presented in tabular format. However, we do capitalize it and end it with a period.
+</p>
+
+
+<p>
+  <a name="176461"> </a>Exceptions that are thrown by a method need to be identified in the Javadoc comment. An @exception tag should read like this: 
+</p>
+
+<pre>
+<a name="176463"> </a>
+* @exception MyException If such and such occurs.<a name="176464"> </a>
+<a name="176465"> </a>
+</pre>
+
+<a name="176466"> </a>Notice that the body always starts with "If", not "Thrown if", or anything else. Just look at the Javadoc output to see why. In the case of an interface or base class that does not throw the exception, use the following: <br>
+
+<pre>
+<a name="176467"> </a>
+* @exception MyException Not thrown in this base class. Derived
+*  classes may throw it if such and such happens.
+<a name="176468"> </a>
+</pre>
+
+<a name="176469"> </a>The exception still has to be declared so that derived classes can throw it, so it needs to be documented as well.<br>
+
+
+<h4>
+  <a name="176528"> </a>6.3.8   FIXME annotations
+</h4>
+
+
+<p>
+  <a name="176520"> </a>We use the keyword "FIXME" in comments to mark places in the code with known problems. For example:
+</p>
+
+<pre>
+<a name="176521"> </a>
+// FIXME: The following cast may not always be safe.<a name="176522"> </a>
+Foo foo = (Foo)bar;<a name="176523"> </a>
+</pre>
+
+<p>
+  <a name="177730"> </a>
+</p>
+
+
+<p>
+  <a name="177736"> </a>To set up Eclipse to highlight FIXMEs, see the instructions in $PTII/doc/coding/eclipse.htm.
+</p>
+
+
+<h3>
+  <a name="177732"> </a>6.4   Code Structure
+</h3>
+
+
+<h4>
+  <a name="177234"> </a>6.4.1   Names of classes and variables
+</h4>
+
+
+<a name="177235"> </a>In general, the names of classes, methods and members should consist of complete words separated using internal capitalization<a href="#177238"><sup>3</sup></a>. Class names, and only class names, have their first letter capitalized, as in AtomicActor. Method and member names are not capitalized, except at internal word boundaries, as in getContainer(). Protected or private members and methods are preceded by a leading underscore "_" as in _protectedMethod().<br>
+
+
+<p>
+  <a name="177240"> </a>Static final constants should be in uppercase, with words separated by underscores, as in INFINITE_CAPACITY. A leading underscore should be used if the constant is protected or private.
+</p>
+
+
+<p>
+  <a name="177241"> </a>Package names should be short and not capitalized, as in "de" for the discrete-event domain.
+</p>
+
+
+<p>
+  <a name="177242"> </a>In Java, there is no limit to name sizes (as it should be). Do not hesitate to use long names.
+</p>
+
+
+<h4>
+  <a name="176384"> </a>6.4.2   Indentation and brackets
+</h4>
+
+
+<p>
+  <a name="167618"> </a>Nested statements should be indented by 4 characters, as in: 
+</p>
+
+<pre>
+
+if (container != null) {
+    Manager manager = container.getManager();
+    if (manager != null) {
+        manager.requestChange(change);
+    }
+}
+<a name="167770"> </a>
+</pre>
+
+<a name="180523"> </a>Closing brackets should be on a line by themselves, aligned with the beginning of the line that contains the open bracket. Please avoid using the Tab character in source files. The reason for this is that code becomes unreadable when the Tab character is interpreted differently by different programs. Your text editor should be configured to react to the Tab key by inserting spaces rather than the tab character. To set up Emacs to follow the Ptolemy II indentation style, see $PTII/util/lisp/ptemacs.el. To set up Eclipse to follow the Ptolemy II indentation style, see the instructions in $PTII/doc/coding/eclipse.htm.<br>
+
+
+<p>
+  <a name="180524"> </a>Long lines should be broken up into many small lines. The easiest places to break long lines are usually just before operators, with the operator appearing on the next line. Long strings can be broken up using the + operator in Java, with the + starting the next line. Continuation lines are indented by 8 characters, as in the throws clause of the constructor in figure <a href="#176733">6.1</a>.
+</p>
+
+
+<h4>
+  <a name="167404"> </a>6.4.3   Spaces
+</h4>
+
+
+<p>
+  <a name="167408"> </a>Use a space after each comma: 
+</p>
+
+
+<p>
+  <a name="180504"> </a>
+</p>
+
+<pre>
+          <b>Right</b>: foo(a, b); <a name="167409"> </a>
+          <b>Wrong</b>: foo(a,b); <a name="167410"> </a>
+<a name="180505"> </a>
+</pre>
+
+<a name="167411"> </a>Use spaces around operators such as plus, minus, multiply, divide or equals signs, after semicolons and after keywords like if, else, for, do, while, try, catch and throws:<br>
+
+<pre>
+          <b>Right</b>: a = b + 1; <a name="167412"> </a>
+          <b>Wrong</b>: a=b+1; <a name="180744"> </a>
+          <b>Right</b>: for (i = 0; i &lt; 10; i += 2) <a name="180745"> </a>
+          <b>Wrong</b>: for (i=0 ;i&lt;10;i+=2)<a name="180746"> </a>
+<b>          Right</b>: if (a == b) {<a name="180751"> </a>
+          <b>Wrong</b>: if(a==b)<a name="180752"> </a>
+<a name="180747"> </a>
+</pre>
+
+<h4>
+  <a name="167439"> </a>6.4.4   Exceptions
+</h4>
+
+
+<a name="167915"> </a>A number of exceptions are provided in the ptolemy.kernel.util package. Use these exceptions when possible because they provide convenient constructor arguments of type Nameable that identify the source of the exception by name in a consistent way.<br>
+
+
+<p>
+  <a name="167919"> </a>A key decision you need to make is whether to use a compile-time exception or a run-time exception. A run-time exception is one that implements the RuntimeException interface. Run-time exceptions are more convenient in that they do not need to be explicitly declared by methods that throw them. However, this can have the effect of masking problems in the code.
+</p>
+
+
+<p>
+  <a name="167986"> </a>The convention we follow is that a run-time exception is acceptable only if the cause of the exception can be tested for prior to calling the method. This is called a <i>testable precondition</i>. For example, if a particular method will fail if the argument is negative, and this fact is documented, then the method can throw a run-time exception if the argument is negative. On the other hand, consider a method that takes a string argument and evaluates it as an expression. The expression may be malformed, in which case an exception will be thrown. Can this be a run-time exception? No, because to determine whether the expression is malformed, you really need to invoke the evaluator. Making this a compile-time exception forces the caller to explicitly deal with the exception, or to declare that it too throws the same exception. In general, we prefer to use compile-time exceptions wherever possible.
+</p>
+
+
+<p>
+  <a name="167449"> </a>When throwing an exception, the detail message should be a complete sentence that includes a string that fully describes what caused the exception. For example
+</p>
+
+<pre>
+
+throw <b>IllegalActionException</b>(this,
+        "Cannot append an object of type: "
+                + obj.getClass().getName() + " because "<a name="167452"> </a>
+                + "it does not implement Cloneable.");
+<a name="170566"> </a>
+</pre>
+
+<a name="168925"> </a>Note that the exception not only gives a way to identify the objects that caused the exception, but also why the exception occurred. There is no need to include in the message an identification of the "this" object passed as the first argument to the exception constructor. That object will be identified when the exception is reported to the user.<br>
+
+
+<p>
+  <a name="177623"> </a>If an exception is caught, be sure to use exception chaining to include the original exception. For example:
+</p>
+
+<pre>
+<a name="177624"> </a>
+String fileName = foo();<a name="180508"> </a>
+try {<a name="177638"> </a>
+    // Try to open the file<a name="177639"> </a>
+} catch (IOException ex) {<a name="177625"> </a>
+    throw new IllegalActionException(this, ex,<a name="177640"> </a>
+            "Failed to open '" + fileName + "'");
+}<a name="177641"> </a>
+</pre>
+
+<h4>
+  <a name="180845"> </a>6.4.5   Code Cleaning
+</h4>
+
+
+<a name="180852"> </a>Code cleaning is the act of homogenizing the coding style, looking for and repairing common problems. Fortunately, Eclipse includes a file formatter and a cleaner that fixes many common problems. Software that is to be formally released should be cleaned according to the guidelines set forth in $PTII/doc/coding/releasemgt.htm<br>
+
+
+<h3>
+  <a name="180365"> </a>6.5   Directory naming conventions
+</h3>
+
+
+<a name="180376"> </a>Individual demonstrations should be in directories under a demo/</font> directory. The name of the directory, and the name of the model should match and both begin with capital letters. The demos should be capitalized so that it is possible to generate code for demonstrations. For example, the Butterfly demonstration is in sdf/demo/Butterfly/Butterfly.xml.<br>
+
+
+<p>
+  <a name="180392"> </a>All other directories begin with lower case letters and most consist solely of lower case letters.
+</p>
+
+
+<h3>
+  <a name="180931"> </a>6.6   Checklist for new files
+</h3>
+
+
+<a name="181193"> </a>Below is a checklist for common issues with new Ptolemy II files.<br>
+
+
+<h4>
+  <a name="181127"> </a>6.6.1   File Structure
+</h4>
+
+
+<p>
+  <a name="181131"> </a><font  face="Wingdings 2">0 Copyright - Does the file have the copyright? (<a href="#176030">section 6.2.1</a>)
+</p>
+
+
+<p>
+  <a name="181135"> </a><font  face="Wingdings 2">0 Is the copyright year correct? New files should have the just the current year (<a href="#176030">section 6.2.1</a>)
+</p>
+
+
+<h4>
+  <a name="180947"> </a>6.6.2   Class comment
+</h4>
+
+
+<p>
+  <a name="180954"> </a><font  face="Wingdings 2">0 Is the first sentence of the class comment a cogent and complete summary? (<a href="#176037">section 6.3</a>)
+</p>
+
+
+<p>
+  <a name="180955"> </a><font  face="Wingdings 2">0 Are these tags present (<a href="#176975">section 6.3.2</a>):
+</p>
+
+<pre>
+@author
+@version
+@since
+@Pt.ProposedRating
+@Pt.AcceptedRating<a name="180956"> </a>
+</pre>
+
+<p>
+  <a name="180964"> </a><font  face="Wingdings 2">0 Are the constructors, methods and variables separated by the appropriate comment lines? (<a href="#176671">section 6.2</a>
+</p>
+
+
+<h4>
+  <a name="180966"> </a>6.6.3   Constructor, method, field and inner class Javadoc documentation.
+</h4>
+
+
+<p>
+  <a name="180977"> </a><font  face="Wingdings 2">0 Within each section, is each Javadoc comment alphabetized? (<a href="#176671">section 6.2</a>)
+</p>
+
+
+<p>
+  <a name="180967"> </a><font  face="Wingdings 2">0 Is the first sentence a cogent and complete summary in the imperative case? (<a href="#177047">section 6.3.5</a>)
+</p>
+
+
+<p>
+  <a name="180968"> </a><font  face="Wingdings 2">0 Are all the parameters of each method clearly documented? (<a href="#176460">section 6.3.7</a>)
+</p>
+
+
+<p>
+  <a name="180969"> </a><font  face="Wingdings 2">0 Are the descriptions of each exception useful? 
+</p>
+
+
+<p>
+  <a name="180970"> </a><font  face="Wingdings 2">0 Did you run doccheck and review the results? See http://chess.eecs.berkeley.edu/ptexternal/nightly (<a href="#176419">section 6.3.1</a>)
+</p>
+
+
+<h4>
+  <a name="180993"> </a>6.6.4   Overall
+</h4>
+
+
+<p>
+  <a name="180994"> </a><font  face="Wingdings 2">0 Did you run spell check on the program and fix errors? (<a href="#180545">section 6.1</a>)
+</p>
+
+
+<p>
+  <a name="181003"> </a><font  face="Wingdings 2">0 Did you run format the file using Eclipse? (<a href="#180545">section 6.1</a>)
+</p>
+
+
+<p>
+  <a name="181004"> </a><font  face="Wingdings 2">0 Did you fix the imports using Eclipse? (<a href="#176031">section 6.2.2</a>)
+</p>
+
+
+  
+<a name="180511"> </a><a href="#176422"><sup>1</sup></a>
+<a name="180511"> </a>See http://java.sun.com/j2se/javadoc/writingdoccomments/ for guidelines from Sun Microsystems on writing Javadoc comments.<br>
+
+<br>
+
+
+<a name="180609"> </a><a href="#180606"><sup>2</sup></a>
+<a name="180609"> </a>J. Reekie, S. Neuendorffer, C. Hylands and E. A. Lee "Software Practice in the Ptolemy Project," Technical Report Series, GSRC-TR-1999-01, Gigascale Semiconductor Research Center, University of California, Berkeley, CA 94720, April 1999, <br>http://ptolemy.eecs.berkeley.edu/ptolemyII/ptIIlatest/ptII/doc/coding/sftwareprac/index.htm<br>
+
+<br>
+
+
+<a name="177238"> </a><a href="#177235"><sup>3</sup></a>
+<a name="177238"> </a>Yes, there are exceptions (NamedObj, CrossRefList, IOPort). Many discussions dealt with these names, and we still regret not making them complete words.<br>
+
+<br>
+</blockquote>
+
+
+
+<table align="right" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="right"><font size="1">
+    
+
+
+
+
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
